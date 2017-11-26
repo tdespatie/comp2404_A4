@@ -21,9 +21,10 @@
 #include <vector>
 
 #include "track.h"
+#include "subject.h"
 
 
-class Playlist {
+class Playlist : public Subject {
 	/*
 	Playlist represents an user playlist of tracks.
 	*/

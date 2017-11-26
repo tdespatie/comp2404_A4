@@ -14,14 +14,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <iostream>
-#include <cstdlib>
-#include <string>
-#include <sstream>
 using namespace std;
-#include "str_util.h"
 #include "mytunes.h"
-#include "UI.h"
-#include "command.h"
 
 MyTunes::MyTunes():view(this)
 {
@@ -42,8 +36,62 @@ void MyTunes::executeCommand(Command cmd){
     //These are the commands that affect the data model
     //or retrieve contents from the data model
 	if(cmd.isCommand(CMD_ADD)) executeCMDADD(cmd);
+    else if(cmd.isCommand(CMD_FOLLOW)) executeCMDFOLLOW(cmd);
 	else if(cmd.isCommand(CMD_DELETE)) executeCMDDELETE(cmd);
 	else if(cmd.isCommand(CMD_SHOW)) executeCMDSHOW(cmd);
+}
+// Execute follow commands
+void MyTunes::executeCMDFOLLOW(Command cmd) {
+    enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, TARGET};
+    if (StrUtil::toLowerCase(cmd.getToken(TARGET)) == "stop" ) {
+        executeDetachPlaylist(cmd);
+    } else {
+        executeAttachPlaylist(cmd);
+    }
+}
+
+void MyTunes::executeAttachPlaylist(Command cmd) {
+    enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, TARGET};
+
+    User * follower = users.findByID(cmd.getToken(FOLLOWER));
+    User * target = users.findByID(cmd.getToken(TARGET));
+    if (follower == NULL || target == NULL) {
+        view.printOutput("Cannot find user specified");
+        return;
+    }
+
+    Playlist * follower_playlist = follower->findPlaylist(cmd.getToken(PLAYLIST_NAME));
+    Playlist * target_playlist = target->findPlaylist(cmd.getToken(PLAYLIST_NAME));
+    if (follower_playlist == NULL || target_playlist == NULL) {
+        view.printOutput("Cannot find playlist specified");
+        return;
+    }
+    target_playlist->attach(*follower);
+    follower->update(*target_playlist);
+    view.printOutput("EXECUTING: FOLLOW " + cmd.getCommandString());
+
+}
+
+void MyTunes::executeDetachPlaylist(Command cmd) {
+    enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, STOP};
+
+    User * follower = users.findByID(cmd.getToken(FOLLOWER));
+    if (follower == NULL ) {
+        view.printOutput("Cannot find user specified");
+        return;
+    }
+
+    vector<User*> theUsers = users.getCollection();
+
+    for (auto user : theUsers) {
+        if (user->getID() != follower->getID()) {
+            Playlist *target_playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME));
+            if (target_playlist != NULL) {
+                target_playlist->dettach(*follower);
+                view.printOutput("EXECUTING: STOPPING FOLLOW " + cmd.getCommandString());
+            }
+        }
+    }
 }
 
 //CMD SHOW COMMANDS
@@ -244,6 +292,7 @@ void MyTunes::executeAddPlaylistTrack(Command cmd){
 	Track * track = tracks.findByID(stoi(cmd.getToken(TRACK_ID)));
 	if(track == NULL) return;
 	playlist->addTrack(*track);
+    view.printOutput("EXECUTING: ADD PLAYLIST TRACK " + cmd.getCommandString());
 	
 }
 
@@ -330,14 +379,12 @@ void MyTunes::executeDeleteTrack(Command cmd){
 	
 	//PERFORM A CASCADED DELETE
 	vector<User*> theUsers = users.getCollection();
-	for(vector<User*>::iterator itr = theUsers.begin(); itr != theUsers.end(); itr++){
-		User* user = *itr;
-		user->removeTrack(*track);				
+	for (auto user : theUsers) {
+        user->removeTrack(*track);
 	}
 	vector<Recording*> theRecordings = recordings.getCollection();
-	for(vector<Recording*>::iterator itr = theRecordings.begin(); itr != theRecordings.end(); itr++){
-		Recording* recording = *itr;
-		recording->removeTrack(*track);				
+	for (auto recording : theRecordings) {
+        recording->removeTrack(*track);
 	}
 	
 	tracks.remove(*track);
@@ -355,7 +402,7 @@ void MyTunes::executeDeleteSong(Command cmd){
 	
 	//Perform Cascaded Delete
 	vector<Track*> theTracks = tracks.getCollection();
-	for(vector<Track*>::iterator itr = theTracks.begin(); itr != theTracks.end(); itr++){
+	for(auto itr = theTracks.begin(); itr != theTracks.end(); itr++){
 		Track* track = *itr;
 		Song* trackSong = track->getSong();
 		if(song == trackSong){
@@ -368,3 +415,4 @@ void MyTunes::executeDeleteSong(Command cmd){
 	songs.remove(*song);
 	view.printOutput("EXECUTING: DELETE SONG " + cmd.getCommandString());
 }
+

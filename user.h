@@ -21,8 +21,9 @@
 #include <vector>
 
 #include "playlist.h"
+#include "observer.h"
 
-class User {
+class User : public Observer {
 	/*
 	User represents an application user.
 	*/
@@ -38,7 +39,16 @@ class User {
 	void addPlaylist(Playlist & aPlayList);
 	void removeTrack(Track & aTrack);
     string toString() const;
-	
+	virtual void update(Playlist &target) {
+		Playlist *followerPlaylist = this->findPlaylist(target.getName());
+		for (auto track : followerPlaylist->getTracks())
+			followerPlaylist->removeTrack(*track);
+
+		for (auto *track : target.getTracks()) {
+			followerPlaylist->addTrack(*track);
+		}
+	};
+
 	private:
 	//static int nextUserNumericID;
 	string userid;

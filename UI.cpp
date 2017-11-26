@@ -33,10 +33,10 @@ UI::UI(MyTunes * ownerApp) {
 void UI::run(){
 	
   //initialize app with input script
-  Command cmd = Command(".read insert_beatles_tracks_rev1.txt");
+  Command cmd = Command(".read test.txt");
   executeCommand(cmd);
 
-  executeCommand(UICMD_HELP); //show help menu on startup
+  //executeCommand(UICMD_HELP); //show help menu on startup
   
   string input;
 

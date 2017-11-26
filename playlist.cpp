@@ -37,23 +37,25 @@ string Playlist::getName(){return name;}
 vector<Track*> & Playlist::getTracks(){return tracks;}
 
 vector<Track*>::iterator Playlist::findPosition(Track & aTrack){
-	for (vector<Track*>::iterator itr = tracks.begin() ; itr != tracks.end(); ++itr)
+	for (auto itr = tracks.begin() ; itr != tracks.end(); ++itr)
 		if(*itr == &aTrack) return itr;
 	return tracks.end();
 }
 
 void Playlist::addTrack(Track & aTrack){
 	//add track if it does not already exist
-	vector<Track*>::iterator itr = findPosition(aTrack);
+	auto itr = findPosition(aTrack);
 	if(itr == tracks.end()) {
 		tracks.push_back(&aTrack);
+		this->notify(*this);
 	}	
 }
 
 void Playlist::removeTrack(Track & aTrack){
-	vector<Track*>::iterator itr = findPosition(aTrack);
+	auto itr = findPosition(aTrack);
 	if(itr != tracks.end()) {
 		tracks.erase(itr);
+		this->notify(*this);
 	}
 }
 

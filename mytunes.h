@@ -16,6 +16,7 @@
 #ifndef MYTUNES_H
 #define MYTUNES_H
 #include <sstream>
+#include <iostream>
 using namespace std;
 #include "UI.h"
 #include "command.h"
@@ -24,14 +25,15 @@ using namespace std;
 #include "track.h"
 #include "user.h"
 #include "mytunes_collection.h"
+#include "arraylist.h"
+#include "str_util.h"
 
 /*
 This is the main application class.
 It has knowlege of the UI and data model (not done in this assignment).
 */
 
-class MyTunes
-{
+class MyTunes {
   public:
     MyTunes();
     void run();
@@ -52,6 +54,7 @@ class MyTunes
 	MyTunesCollection<User> users;
 	
     void executeCMDADD(Command cmd);
+	void executeCMDFOLLOW(Command cmd);
     void executeCMDDELETE(Command cmd);
     void executeCMDSHOW(Command cmd);
 	
@@ -61,6 +64,7 @@ class MyTunes
 	void executeAddUser(Command cmd);
 	void executeAddPlaylist(Command cmd);
 	void executeAddPlaylistTrack(Command cmd);
+    void executeAttachPlaylist(Command cmd);
 	
 	void executeDeleteRecording(Command cmd);
 	void executeDeleteUser(Command cmd);
@@ -68,6 +72,7 @@ class MyTunes
     void executeDeleteUserPlaylistTrack(Command cmd);
 	void executeDeleteTrack(Command cmd); //cascading delete
 	void executeDeleteSong(Command cmd);
-	
+    void executeDetachPlaylist(Command cmd);
+
 };
 #endif

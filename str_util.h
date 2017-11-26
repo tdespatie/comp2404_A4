@@ -23,8 +23,7 @@ using namespace std;
 //String Utilties Class
 //Should this be done by sub-classing the <string> lib?
 
-class StrUtil
-{
+class StrUtil {
   public:
   static string trim(const string & s); 
   static string toTitleCase(const string & s);

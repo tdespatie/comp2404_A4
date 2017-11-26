@@ -3,7 +3,7 @@ mytunes: $(OBJ)
 	g++ -o mytunes $(OBJ)
 
 main.o:	main.cpp mytunes_collection.h
-	g++ -c main.cpp
+	g++ -c -std=c++11 main.cpp
 
 mytunes.o:	mytunes.cpp mytunes_collection.h
 	g++ -c -std=c++11 mytunes.cpp
@@ -17,10 +17,10 @@ command.o:	command.cpp command.h
 song.o:	song.cpp song.h 
 	g++ -c -std=c++11 song.cpp
 		
-user.o:	user.cpp user.h 
+user.o:	user.cpp user.h observer.h
 	g++ -c -std=c++11 user.cpp
 	
-playlist.o:	playlist.cpp playlist.h 
+playlist.o:	playlist.cpp playlist.h arraylist.h subject.h
 	g++ -c -std=c++11 playlist.cpp
 	
 recording.o:	recording.cpp recording.h 

@@ -168,10 +168,10 @@ void Command::parse(string cmdStr)
    //Command is now tokenized into tokens vector
 	
    //Print parsed command tokens for now
-   cout << "PARSED COMMAND:" << '\n';
-   //shows use of iterator
-   for (vector<string>::iterator it = tokens.begin(); it!=tokens.end(); ++it)
-       cout << *it << '\n';
+//   cout << "PARSED COMMAND:" << '\n';
+//   //shows use of iterator
+//   for (vector<string>::iterator it = tokens.begin(); it!=tokens.end(); ++it)
+//       cout << *it << '\n';
 
 }
 

@@ -28,6 +28,7 @@ some developer commands not intended for production
 
 //Application commands
 const string CMD_ADD = "add"; //add items to collections
+const string CMD_FOLLOW = "follow"; //follow playlists
 const string CMD_DELETE = "delete"; //delete items from collections
 const string CMD_SHOW = "show"; //display collections
 
@@ -52,10 +53,11 @@ const string UICommands[] = {
 const int NumberOfUICommands = 4;
 const string AppCommands[] = {
 	CMD_ADD,
+	CMD_FOLLOW,
 	CMD_DELETE,
 	CMD_SHOW,
 	};
-const int NumberOfAppCommands = 3;
+const int NumberOfAppCommands = 4;
 
 const string DevCommands[] = {
 	DEV_trim,
