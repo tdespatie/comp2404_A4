@@ -1,0 +1,36 @@
+add -s 1000 "I Saw Her Standing There" "Paul McCartney, John Lennon"
+add -s 1001 "Misery" "Paul McCartney, John Lennon"
+add -s 1002 "Anna (Go To Him)" "Arthur Alexander"
+add -s 1003 "Chains" "Gerry Goffin, Carole King"
+add -s 1004 "Boys" "Luther Dixon, Wes Farrell"
+add -s 1005 "Ask Me Why" "Paul McCartney, John Lennon"
+add -t 1 100 1000 1
+add -t 2 100 1001 2
+add -t 3 100 1002 3
+add -t 4 100 1003 4
+add -t 5 100 1004 5
+add -u gjones "Glenn Jones"
+add -u sjones "Susan Jones"
+add -u fjones "Frank Jones"
+add -u ajones "Anne Jones"
+add -u cindy "Cindy Reynolds"
+add -p gjones "mysongs" // Same playlist
+add -p fjones "favourites"
+add -p fjones "mysongs" // Same playlist
+follow -u fjones -p "mysongs" -f gjones
+add -l gjones "mysongs" 1
+add -l gjones "mysongs" 3
+show users -u gjones
+show users -u fjones
+delete -u gjones -p mysongs -t 3
+show users -u fjones
+follow -u fjones -p "mysongs" -f stop
+add -l gjones "mysongs" 3
+show users -u gjones
+show users -u fjones
+follow -u fjones -p "mysongs" -f gjones
+show users -u fjones
+delete -u fjones -p mysongs -t 1
+show users -u gjones
+add -l gjones "mysongs" 5
+show users -u fjones
