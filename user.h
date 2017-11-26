@@ -48,6 +48,11 @@ class User : public Observer {
 			followerPlaylist->addTrack(*track);
 		}
 	};
+    virtual void deletion(Playlist &target) {
+        Playlist *followerPlaylist = this->findPlaylist(target.getName());
+        target.dettach(*this);
+        cout << "Target playlist: " << followerPlaylist->getName() << " has been deleted." << endl;
+    }
 
 	private:
 	//static int nextUserNumericID;

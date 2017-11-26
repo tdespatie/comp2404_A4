@@ -34,3 +34,11 @@ delete -u fjones -p mysongs -t 1
 show users -u gjones
 add -l gjones "mysongs" 5
 show users -u fjones
+delete -u gjones -p mysongs
+show users -u fjones
+add -p gjones "mysongs" // Same playlist
+show users -u fjones
+add -l gjones "mysongs" 1
+add -l gjones "mysongs" 3
+follow -u fjones -p "mysongs" -f gjones
+show users -u fjones

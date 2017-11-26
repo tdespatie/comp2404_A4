@@ -16,7 +16,7 @@ class Playlist;
 class Observer {
 public:
     virtual void update(Playlist &subject) = 0;
-    //virtual void deleteTrack(Track track) = 0;
+    virtual void deletion(Playlist &subject) = 0;
 
     int operator==(const Observer &obs) const {
         return this == &obs;
