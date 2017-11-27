@@ -2,7 +2,8 @@
 /*                                                   */
 /*  Program:  MyTunes Music Player                   */
 /*  Author:   Louis Nel                              */
-/*  Date:     21-SEP-2017                            */
+/*  Contributor: Tyler Despatie						 */
+/*  Date:     25-Nov-2017                            */
 /*                                                   */
 /*  (c) 2017 Louis Nel                               */
 /*  All rights reserved.  Distribution and           */
@@ -90,19 +91,19 @@ void MyTunes::executeAttachPlaylist(Command cmd) {
 void MyTunes::executeDetachPlaylist(Command cmd) {
     enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, STOP};
 
-    User * follower = users.findByID(cmd.getToken(FOLLOWER)); //
-    if (follower == nullptr ) {
+    User * follower = users.findByID(cmd.getToken(FOLLOWER)); // Get user specified
+    if (follower == nullptr ) { // Check to see if user exists
         view.printOutput("FOLLOW: CANNOT FIND USER SPECIFIED " + cmd.getCommandString());
         return;
     }
 
-    vector<User*> theUsers = users.getCollection();
+    vector<User*> theUsers = users.getCollection(); // Retrieve all the users
 
-    for (auto user : theUsers) {
-        if (user->getID() != follower->getID()) {
-            Playlist *target_playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME));
-            if (target_playlist != nullptr) {
-                target_playlist->detach(*follower);
+    for (auto user : theUsers) { // Find who owns the playlist specified
+        if (user->getID() != follower->getID()) { // Don't bother checking the user specified
+            Playlist *target_playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME)); // Find playlist we wish to stop following
+            if (target_playlist != nullptr) { // Make sure it exists
+                target_playlist->detach(*follower); // Once we find the playlist we wish to stop following, detach the user
                 view.printOutput("EXECUTING: STOPPING FOLLOW " + cmd.getCommandString());
             }
         }

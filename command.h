@@ -2,6 +2,7 @@
 /*                                                   */
 /*  Program:  MyTunes Music Player                   */
 /*  Author:   Louis Nel                              */
+/*  Contributor: Tyler Despatie						 */
 /*  Date:     21-SEP-2017                            */
 /*                                                   */
 /*  (c) 2017 Louis Nel                               */

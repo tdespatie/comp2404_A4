@@ -2,7 +2,7 @@
 // File Name: observer.h
 // Created by Tyler Despatie on 11/25/2017.
 // Student Number: 101010622
-// Assignment: 1
+// Assignment: 4
 // Course: COMP 2404
 // Section: A4
 
