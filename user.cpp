@@ -64,7 +64,7 @@ vector<Playlist *>::iterator User::findPosition(Playlist &aPlaylist) {
 Playlist *User::findPlaylist(const string &aPlaylistName) {
     for (auto &playlist : playlists)
         if (aPlaylistName == playlist->getName()) return playlist;
-    return NULL;
+    return nullptr;
 }
 
 void User::addPlaylist(Playlist &aPlaylist) {

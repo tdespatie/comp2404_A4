@@ -36,7 +36,7 @@ void MyTunes::executeCommand(Command cmd){
     //These are the commands that affect the data model
     //or retrieve contents from the data model
 	if(cmd.isCommand(CMD_ADD)) executeCMDADD(cmd);
-    else if(cmd.isCommand(CMD_FOLLOW)) executeCMDFOLLOW(cmd);
+    else if(cmd.isCommand(CMD_FOLLOW)) executeCMDFOLLOW(cmd); // New follow command
 	else if(cmd.isCommand(CMD_DELETE)) executeCMDDELETE(cmd);
 	else if(cmd.isCommand(CMD_SHOW)) executeCMDSHOW(cmd);
 }
@@ -53,36 +53,36 @@ void MyTunes::executeCMDFOLLOW(Command cmd) {
 void MyTunes::executeAttachPlaylist(Command cmd) {
     enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, TARGET};
 
-    User * follower = users.findByID(cmd.getToken(FOLLOWER));
-    User * target = users.findByID(cmd.getToken(TARGET));
-    if (follower == NULL || target == NULL) {
-        view.printOutput("Cannot find user specified");
+    User * follower = users.findByID(cmd.getToken(FOLLOWER)); // Find the user specified
+    User * target = users.findByID(cmd.getToken(TARGET)); // Find the target specified
+    if (follower == nullptr || target == nullptr) { // Check that both the users exist
+        view.printOutput("FOLLOW: CANNOT FIND USER SPECIFIED " + cmd.getCommandString());
         return;
     }
 
-    Playlist * follower_playlist = follower->findPlaylist(cmd.getToken(PLAYLIST_NAME));
-    Playlist * target_playlist = target->findPlaylist(cmd.getToken(PLAYLIST_NAME));
-    if (follower_playlist == NULL || target_playlist == NULL) {
-        view.printOutput("Cannot find playlist specified");
+    Playlist * follower_playlist = follower->findPlaylist(cmd.getToken(PLAYLIST_NAME)); // Find the follower's playlist
+    Playlist * target_playlist = target->findPlaylist(cmd.getToken(PLAYLIST_NAME)); // Find the target's playlist
+    if (follower_playlist == nullptr || target_playlist == nullptr) { // Make sure they both exist
+        view.printOutput("FOLLOW: CANNOT FIND PLAYLIST SPECIFIED " + cmd.getCommandString());
         return;
     }
 
-    if (target_playlist->checkIfFollowing(*follower)) {
-        view.printOutput(cmd.getToken(FOLLOWER) + " is already following playlist specified");
+    if (target_playlist->checkIfFollowing(*follower)) { // Check to see if the follower is already following the target
+        view.printOutput("FOLLOW: " + cmd.getToken(FOLLOWER) + " IS ALREADY FOLLOWING THE PLAYLIST SPECIFIED " + cmd.getCommandString());
         return;
     }
 
-    if (follower_playlist->checkIfFollowing(*target)) {
-        view.printOutput(cmd.getToken(TARGET) + " is already following " + cmd.getToken(FOLLOWER));
+    if (follower_playlist->checkIfFollowing(*target)) { // Check to see if the target is already following the follower
+        view.printOutput("FOLLOW" + cmd.getToken(TARGET) + " IS ALREADY FOLLOWING " + cmd.getToken(FOLLOWER) + " " + cmd.getCommandString());
         return;
     }
 
-    if (cmd.getToken(FOLLOWER) == cmd.getToken(TARGET)) {
-        view.printOutput("User is unable to follow their own playlist");
+    if (cmd.getToken(FOLLOWER) == cmd.getToken(TARGET)) { // Check to see if the user is trying to follow himself
+        view.printOutput("FOLLOW: USER IS UNABLE TO FOLLOW THEIR OWN PLAYLIST " + cmd.getCommandString() );
         return;
     }
-    target_playlist->attach(*follower);
-    follower->update(*target_playlist);
+    target_playlist->attach(*follower); // Subscribe the follower to any updates the target has
+    follower->update(*target_playlist); // Update the follower's playlist to match the target's
     view.printOutput("EXECUTING: FOLLOW " + cmd.getCommandString());
 
 }
@@ -90,9 +90,9 @@ void MyTunes::executeAttachPlaylist(Command cmd) {
 void MyTunes::executeDetachPlaylist(Command cmd) {
     enum arguments {FOLLOW, _U, FOLLOWER, _P, PLAYLIST_NAME, _F, STOP};
 
-    User * follower = users.findByID(cmd.getToken(FOLLOWER));
-    if (follower == NULL ) {
-        view.printOutput("Cannot find user specified");
+    User * follower = users.findByID(cmd.getToken(FOLLOWER)); //
+    if (follower == nullptr ) {
+        view.printOutput("FOLLOW: CANNOT FIND USER SPECIFIED " + cmd.getCommandString());
         return;
     }
 
@@ -101,7 +101,7 @@ void MyTunes::executeDetachPlaylist(Command cmd) {
     for (auto user : theUsers) {
         if (user->getID() != follower->getID()) {
             Playlist *target_playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME));
-            if (target_playlist != NULL) {
+            if (target_playlist != nullptr) {
                 target_playlist->detach(*follower);
                 view.printOutput("EXECUTING: STOPPING FOLLOW " + cmd.getCommandString());
             }
@@ -196,7 +196,7 @@ void MyTunes::executeAddSong(Command cmd){
 	  cmd.getToken(COMPOSER),
 	  id
 	);
-	if(song == NULL) return;
+	if(song == nullptr) return;
 	songs.add(*song);
 	view.printOutput("EXECUTING: ADD SONG " + cmd.getCommandString());
 }
@@ -222,7 +222,7 @@ void MyTunes::executeAddRecording(Command cmd){
 	  cmd.getToken(YEAR),
 	  id
 	);
-	if(recording == NULL) return;
+	if(recording == nullptr) return;
 	recordings.add(*recording);
 	view.printOutput("EXECUTING: ADD RECORDING " + cmd.getCommandString());
 }
@@ -230,9 +230,9 @@ void MyTunes::executeAddTrack(Command cmd){
     //add track
     //add -t trackID albumID songID track_number
     //add -t 12 100 1000 1
-	//add -t 12 null 1000 1 //add track not on recording
+	//add -t 12 NULL 1000 1 //add track not on recording
     //add -t ? 100 1000 1
-	//add -t ? null 1000 1  //add track not on recording
+	//add -t ? NULL 1000 1  //add track not on recording
 	
 	enum arguments {ADD, _T, ID, RECORDING_ID, SONG_ID, TRACK_NUMBER};
 	
@@ -247,7 +247,7 @@ void MyTunes::executeAddTrack(Command cmd){
 	
 	Recording * recording;
 	//tracks don't have to be associated with recordings
-	if(cmd.getToken(RECORDING_ID).compare("null") == 0) recording = NULL;
+	if(cmd.getToken(RECORDING_ID).compare("nullptr") == 0) recording = nullptr;
 	else {
 		if(!cmd.isValidIndex(cmd.getToken(RECORDING_ID))) return;
 		recording = recordings.findByID(stoi(cmd.getToken(RECORDING_ID)));
@@ -257,9 +257,9 @@ void MyTunes::executeAddTrack(Command cmd){
 	Track* track = new Track(
 	  id, songs.findByID(stoi(cmd.getToken(SONG_ID)))
 	);
-	if(track == NULL) return;
+	if(track == nullptr) return;
 	tracks.add(*track);
-	if(recording != NULL) recording->addTrack(*track, track_number);
+	if(recording != nullptr) recording->addTrack(*track, track_number);
 	view.printOutput("EXECUTING: ADD TRACK " + cmd.getCommandString());
 }
 void MyTunes::executeAddUser(Command cmd){
@@ -273,7 +273,7 @@ void MyTunes::executeAddUser(Command cmd){
 	  cmd.getToken(NAME)
 	  );
 	  
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	users.add(*user);
 	view.printOutput("EXECUTING: ADD USER " + cmd.getCommandString());
 }
@@ -285,9 +285,9 @@ void MyTunes::executeAddPlaylist(Command cmd){
 	enum arguments {ADD, _P, USERID, PLAYLIST_NAME};
 	
 	User* user = users.findByID(cmd.getToken(USERID));
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	Playlist * playlist = new Playlist(cmd.getToken(PLAYLIST_NAME));
-	if(playlist == NULL) return;
+	if(playlist == nullptr) return;
 	user->addPlaylist(*playlist);
 	view.printOutput("EXECUTING: ADD PLAYLIST " + cmd.getCommandString());
 }
@@ -301,11 +301,11 @@ void MyTunes::executeAddPlaylistTrack(Command cmd){
 	if(!cmd.isValidIndex(cmd.getToken(TRACK_ID))) return;
 
 	User * user = users.findByID(cmd.getToken(USERID));
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	Playlist * playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME));
-	if(playlist == NULL) return;
+	if(playlist == nullptr) return;
 	Track * track = tracks.findByID(stoi(cmd.getToken(TRACK_ID)));
-	if(track == NULL) return;
+	if(track == nullptr) return;
 	playlist->addTrack(*track);
     view.printOutput("EXECUTING: ADD PLAYLIST TRACK " + cmd.getCommandString());
 	
@@ -340,7 +340,7 @@ void MyTunes::executeDeleteRecording(Command cmd){
 	if(!cmd.isValidIndex(cmd.getToken(ID))) return;
 
 	Recording* recording = recordings.findByID(stoi(cmd.getToken(ID)));
-	if(recording == NULL) return;
+	if(recording == nullptr) return;
 	recordings.remove(*recording);
 	view.printOutput("EXECUTING: DELETE RECORDING " + cmd.getCommandString());
 }
@@ -349,7 +349,7 @@ void MyTunes::executeDeleteUser(Command cmd){
 	enum arguments {DELETE, _U, USER_ID};
 	
 	User* user = users.findByID(cmd.getToken(USER_ID));
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	users.remove(*user);
 	view.printOutput("EXECUTING: DELETE USER " + cmd.getCommandString());
 }
@@ -359,9 +359,9 @@ void MyTunes::executeDeleteUserPlaylist(Command cmd){
 	string user_id = cmd.getToken("-u");
 	string playlistName = cmd.getToken("-p");	
 	User* user = users.findByID(user_id);
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	Playlist * playlist = user->findPlaylist(playlistName);
-	if(playlist == NULL) return;
+	if(playlist == nullptr) return;
     playlist->notifyDeletion(*playlist);
 	user->removePlaylist(*playlist);
 	view.printOutput("EXECUTING: DELETE USER PLAYLIST " + cmd.getCommandString());
@@ -376,11 +376,11 @@ void MyTunes::executeDeleteUserPlaylistTrack(Command cmd){
     if(!cmd.isValidIndex(trackIDstring)) return;
     int trackIndex = stoi(trackIDstring);	
 	User* user = users.findByID(user_id);
-	if(user == NULL) return;
+	if(user == nullptr) return;
 	Playlist * playlist = user->findPlaylist(playlistName);
-	if(playlist == NULL) return;
+	if(playlist == nullptr) return;
 	Track * track = tracks.findByID(trackIndex);
-	if(track == NULL) return;
+	if(track == nullptr) return;
 	playlist->removeTrack(*track);
 	view.printOutput("EXECUTING: DELETE USER PLAYLIST TRACK " + cmd.getCommandString());
 }
@@ -391,7 +391,7 @@ void MyTunes::executeDeleteTrack(Command cmd){
     if(!cmd.isValidIndex(trackIDstring)) return;
 	int trackIndex = stoi(trackIDstring);
 	Track * track = tracks.findByID(trackIndex);
-	if(track == NULL) return;
+	if(track == nullptr) return;
 	
 	//PERFORM A CASCADED DELETE
 	vector<User*> theUsers = users.getCollection();
@@ -414,7 +414,7 @@ void MyTunes::executeDeleteSong(Command cmd){
 	if(!cmd.isValidIndex(cmd.getToken(ID))) return;
 	
 	Song* song = songs.findByID(stoi(cmd.getToken(ID)));
-	if(song == NULL) return;
+	if(song == nullptr) return;
 	
 	//Perform Cascaded Delete
 	vector<Track*> theTracks = tracks.getCollection();

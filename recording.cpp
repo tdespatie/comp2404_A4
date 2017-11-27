@@ -30,7 +30,7 @@ Recording::Recording(const string & aTitle,
 	producer = aProducer;
 	year = aYear;
 	id = anID;
-	tracks = vector<Track*>(MAX_NUMBER_OF_TRACKS, NULL);
+	tracks = vector<Track*>(MAX_NUMBER_OF_TRACKS, nullptr);
 }
 Recording::Recording(const Recording & aRecording){
 	cout << "Recording(const Recording & aRecording)" << endl;
@@ -61,7 +61,7 @@ void Recording::addTrack(Track & aTrack, int position){
 void Recording::removeTrack(Track & aTrack){
 	//remove track from recording
 	for(vector<Track*>::size_type i = 0; i<tracks.size(); i++)
-		if(tracks[i] == &aTrack) tracks[i] = NULL;
+		if(tracks[i] == &aTrack) tracks[i] = nullptr;
 }
 
 string Recording::toString()const {
@@ -71,7 +71,7 @@ string Recording::toString()const {
 	s.append("\n");
 	s.append(indent + "Tracks:\n");
 	for (vector<Track*>::size_type i = 0 ; i < tracks.size(); i++){
-		if(tracks[i] != NULL)
+		if(tracks[i] != nullptr)
 		   s.append(indent + to_string(i) + " " + (tracks[i])->toString() + "\n");
 	}
 	

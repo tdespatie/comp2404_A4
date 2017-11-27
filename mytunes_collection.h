@@ -75,7 +75,7 @@ T * MyTunesCollection<T>::findByID(int anID){
 	//find by numeric ID
 	for (typename vector<T*>::iterator it = collection.begin(); it != collection.end(); ++it)
 		if((*it)->getID() == anID) return *it;
-	return NULL;
+	return nullptr;
 }
 
 template <typename T>
@@ -83,7 +83,7 @@ T * MyTunesCollection<T>::findByID(const string & anID) {
 	//find by string ID
 	for (typename vector<T*>::iterator it = collection.begin() ; it != collection.end(); ++it)
 		if(((*it)->getIDString()).compare(anID) == 0) return *it;
-	return NULL;
+	return nullptr;
 }
 
 template <typename T>
@@ -112,7 +112,7 @@ template <typename T>
 void MyTunesCollection<T>::showOn(UI & view, int memberID)  {
   view.printOutput("Element:");
   T * t = findByID(memberID);
-  if( t != NULL)
+  if( t != nullptr)
        view.printOutput(t->toString());	  
 }
 
@@ -120,7 +120,7 @@ template <typename T>
 void MyTunesCollection<T>::showOn(UI & view, string memberID)  {
   view.printOutput("Element:");
   T * t = findByID(memberID);
-  if( t != NULL)
+  if( t != nullptr)
        view.printOutput(t->toString());	  
 }
 
