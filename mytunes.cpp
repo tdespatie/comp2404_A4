@@ -102,7 +102,7 @@ void MyTunes::executeDetachPlaylist(Command cmd) {
         if (user->getID() != follower->getID()) {
             Playlist *target_playlist = user->findPlaylist(cmd.getToken(PLAYLIST_NAME));
             if (target_playlist != NULL) {
-                target_playlist->dettach(*follower);
+                target_playlist->detach(*follower);
                 view.printOutput("EXECUTING: STOPPING FOLLOW " + cmd.getCommandString());
             }
         }

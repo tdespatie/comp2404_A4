@@ -47,7 +47,7 @@ void Playlist::addTrack(Track & aTrack){
 	auto itr = findPosition(aTrack);
 	if(itr == tracks.end()) {
 		tracks.push_back(&aTrack);
-		this->notify(*this);
+		this->notify(*this); // Notify the Observers that this has changed
 	}	
 }
 
@@ -55,7 +55,7 @@ void Playlist::removeTrack(Track & aTrack){
 	auto itr = findPosition(aTrack);
 	if(itr != tracks.end()) {
 		tracks.erase(itr);
-		this->notify(*this);
+		this->notify(*this);  // Notify the Observers that this has changed
 	}
 }
 

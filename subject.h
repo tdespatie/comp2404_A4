@@ -21,22 +21,21 @@ class Subject {
 public:
     void attach(Observer &obs) {
         observers.add(obs);
-        //cout << "\nAttach: " << " observers size: " << observers.size() << "\n";
 
     }
 
-    void dettach(Observer &obs) {
+    void detach(Observer &obs) {
         observers.remove(obs);
-        //cout << "\nDettach: " << " observers size: " << observers.size() << "\n";
     }
 
     bool checkIfFollowing(Observer &obs) {
-        if (observers.isEmpty()) return false;
         ArrayList <Observer> observers_copy = observers; //make copy to iterate over
+        static int i =0;
         for (ArrayList<Observer>::iterator itr = observers_copy.begin(); itr != observers_copy.end(); itr++) {
             if (*itr == obs)
                 return true;
         }
+        return false;
     }
 
 
@@ -45,7 +44,7 @@ public:
         ArrayList <Observer> observers_copy = observers; //make copy to iterate over
         for (ArrayList<Observer>::iterator itr = observers_copy.begin(); itr != observers_copy.end(); itr++) {
             (*itr).deletion(u);
-            this->dettach(*itr);
+            this->detach(*itr);
         }
     }
 protected:
@@ -58,7 +57,7 @@ protected:
         //observers might be interested in
 
         //Note: observer collection is copied and the copy
-        //iterated over so that observers can dettach
+        //iterated over so that observers can detach
         //when they are being notified (i.e. double buffering)
 
         //In the Gamma pattern this is not done and that code will

@@ -28,9 +28,8 @@ class User : public Observer {
 	User represents an application user.
 	*/
 	public:
-	User(const string & aUserID, 
-	          const string & aName); 
-	~User(void);
+	User(const string & aUserID, const string & aName);
+	~User();
     int getID();
     //string getUserID();
     string getIDString();
@@ -39,23 +38,11 @@ class User : public Observer {
 	void addPlaylist(Playlist & aPlayList);
 	void removeTrack(Track & aTrack);
     string toString() const;
-	virtual void update(Playlist &target) {
-		Playlist *followerPlaylist = this->findPlaylist(target.getName());
-        vector<Track*>& tracks = followerPlaylist->getTracks();
-		for (vector<Track*>::reverse_iterator itr = tracks.rbegin(); itr != tracks.rend(); ++itr ) {
-            cout << "removed: " << (*itr)->toString() << endl;
-            followerPlaylist->removeTrack(**itr);
-        }
 
-		for (auto track : target.getTracks()) {
-			followerPlaylist->addTrack(*track);
-		}
-	};
-    virtual void deletion(Playlist &target) {
-        Playlist *followerPlaylist = this->findPlaylist(target.getName());
-        target.dettach(*this);
-        cout << "Target playlist: " << followerPlaylist->getName() << " has been deleted." << endl;
-    }
+    // These are our pure virtual functions from Observer
+    void update(Playlist &) override;
+    void deletion(Playlist &) override;
+
 
 	private:
 	//static int nextUserNumericID;

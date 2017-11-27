@@ -30,7 +30,7 @@ class Playlist : public Subject {
 	*/
 	public:
 	Playlist(const string & aPlaylistName); 
-	~Playlist(void);
+	~Playlist();
     int getID();
 	string getName();
 	void removeTrack(Track & aTrack);

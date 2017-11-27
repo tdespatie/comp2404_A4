@@ -107,3 +107,23 @@ ostream &operator<<(ostream &out, const User &aUser) {
     out << aUser.toString() << endl;
     return out;
 }
+
+// This is our function used to handle updates to the Playlists we follow
+void User::update(Playlist &target)  {
+    Playlist *followerPlaylist = this->findPlaylist(target.getName()); // Find the playlist which needs to be changed
+    vector<Track*>& tracks = followerPlaylist->getTracks();
+    for (auto itr = tracks.rbegin(); itr != tracks.rend(); ++itr )  // Remove all the tracks from the playlist
+        followerPlaylist->removeTrack(**itr);
+
+
+    for (auto track : target.getTracks())  // Add all the tracks the playlist we are following has
+        followerPlaylist->addTrack(*track);
+
+};
+
+// This is our function used to handle what happens when a playlist we are following gets deleted
+void User::deletion(Playlist &target) {
+    Playlist *followerPlaylist = this->findPlaylist(target.getName());
+    target.detach(*this); // We need to detach all the observers that are following this playlist
+    cout << "TARGET PLAYLIST: " << followerPlaylist->getName() << " HAS BEEN DELETED." << endl;
+}

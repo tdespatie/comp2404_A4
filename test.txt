@@ -36,7 +36,7 @@ add -l gjones "mysongs" 5 // add track 5 to gjones, should also be added to fjon
 show users // both gjones and fjones playlists should look the same
 delete -u gjones -p mysongs // delete gjone's playlist
 show users -u fjones // fjones's playlist should still exist
-add -p gjones "mysongs" // add gjone's playlist back
+add -p gjones "mysongs" // add gjones's playlist back
 show users -u fjones // fjones's playlist should remain the same
 add -l gjones "mysongs" 1 // add track 1 to gjones
 show users // gjones and fjones should have different tracks
@@ -52,3 +52,5 @@ show users -u fjones // fjones should have track 1 in favs
 add -p cindy "mysongs"
 follow -u cindy -p "mysongs" -f gjones // cindy follows gjones
 show users
+add -l gjones "mysongs" 5
+show users // Now cindy, fjones and gjones should all have the same playlist tracks
