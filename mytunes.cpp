@@ -66,6 +66,21 @@ void MyTunes::executeAttachPlaylist(Command cmd) {
         view.printOutput("Cannot find playlist specified");
         return;
     }
+
+    if (target_playlist->checkIfFollowing(*follower)) {
+        view.printOutput(cmd.getToken(FOLLOWER) + " is already following playlist specified");
+        return;
+    }
+
+    if (follower_playlist->checkIfFollowing(*target)) {
+        view.printOutput(cmd.getToken(TARGET) + " is already following " + cmd.getToken(FOLLOWER));
+        return;
+    }
+
+    if (cmd.getToken(FOLLOWER) == cmd.getToken(TARGET)) {
+        view.printOutput("User is unable to follow their own playlist");
+        return;
+    }
     target_playlist->attach(*follower);
     follower->update(*target_playlist);
     view.printOutput("EXECUTING: FOLLOW " + cmd.getCommandString());
@@ -347,6 +362,7 @@ void MyTunes::executeDeleteUserPlaylist(Command cmd){
 	if(user == NULL) return;
 	Playlist * playlist = user->findPlaylist(playlistName);
 	if(playlist == NULL) return;
+    playlist->notifyDeletion(*playlist);
 	user->removePlaylist(*playlist);
 	view.printOutput("EXECUTING: DELETE USER PLAYLIST " + cmd.getCommandString());
 }

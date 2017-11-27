@@ -10,35 +10,45 @@ add -t 3 100 1002 3
 add -t 4 100 1003 4
 add -t 5 100 1004 5
 add -u gjones "Glenn Jones"
-add -u sjones "Susan Jones"
 add -u fjones "Frank Jones"
-add -u ajones "Anne Jones"
 add -u cindy "Cindy Reynolds"
 add -p gjones "mysongs" // Same playlist
+add -p cindy "favs"
 add -p fjones "favourites"
 add -p fjones "mysongs" // Same playlist
 follow -u fjones -p "mysongs" -f gjones
 add -l gjones "mysongs" 1
 add -l gjones "mysongs" 3
+add -l cindy "favs" 4
 show users -u gjones
 show users -u fjones
-delete -u gjones -p mysongs -t 3
-show users -u fjones
-follow -u fjones -p "mysongs" -f stop
-add -l gjones "mysongs" 3
-show users -u gjones
-show users -u fjones
-follow -u fjones -p "mysongs" -f gjones
-show users -u fjones
-delete -u fjones -p mysongs -t 1
-show users -u gjones
-add -l gjones "mysongs" 5
-show users -u fjones
-delete -u gjones -p mysongs
-show users -u fjones
-add -p gjones "mysongs" // Same playlist
-show users -u fjones
-add -l gjones "mysongs" 1
-add -l gjones "mysongs" 3
-follow -u fjones -p "mysongs" -f gjones
-show users -u fjones
+delete -u gjones -p mysongs -t 3 // Should cause fjones to delete track 3 as well
+show users -u fjones // Track 3 should not appear
+follow -u fjones -p "mysongs" -f stop // Stop following gjones
+add -l gjones "mysongs" 3 // gjones should now have one song more than fjones
+show users -u gjones // gjones should have track 3 listed
+show users -u fjones // fjones should not have track 3 listed
+follow -u fjones -p "mysongs" -f gjones // follow gjones again
+show users -u fjones // fjones should have track 3 now listed
+delete -u fjones -p mysongs -t 1 // fjones should be able to delete his own track
+show users // gjones should still have all his tracks
+add -l gjones "mysongs" 5 // add track 5 to gjones, should also be added to fjones
+show users // both gjones and fjones playlists should look the same
+delete -u gjones -p mysongs // delete gjone's playlist
+show users -u fjones // fjones's playlist should still exist
+add -p gjones "mysongs" // add gjone's playlist back
+show users -u fjones // fjones's playlist should remain the same
+add -l gjones "mysongs" 1 // add track 1 to gjones
+show users // gjones and fjones should have different tracks
+follow -u fjones -p "mysongs" -f gjones // follow gjones again
+show users // now fjones should have the same tracks as gjones
+follow -u fjones -p "mysongs" -f fjones // this command should fail as you can't follow your own playlist
+follow -u gjones -p "mysongs" -f fjones // this command should fail as they can't follow eachother
+add -p fjones "favs"
+follow -u fjones -p "favs" -f cindy // follow cindy's playlist
+show users // fjones should have the same songs as cindy
+add -l cindy "favs" 1 // add track 1 to gjones
+show users -u fjones // fjones should have track 1 in favs
+add -p cindy "mysongs"
+follow -u cindy -p "mysongs" -f gjones // cindy follows gjones
+show users

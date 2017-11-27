@@ -41,10 +41,13 @@ class User : public Observer {
     string toString() const;
 	virtual void update(Playlist &target) {
 		Playlist *followerPlaylist = this->findPlaylist(target.getName());
-		for (auto track : followerPlaylist->getTracks())
-			followerPlaylist->removeTrack(*track);
+        vector<Track*>& tracks = followerPlaylist->getTracks();
+		for (vector<Track*>::reverse_iterator itr = tracks.rbegin(); itr != tracks.rend(); ++itr ) {
+            cout << "removed: " << (*itr)->toString() << endl;
+            followerPlaylist->removeTrack(**itr);
+        }
 
-		for (auto *track : target.getTracks()) {
+		for (auto track : target.getTracks()) {
 			followerPlaylist->addTrack(*track);
 		}
 	};

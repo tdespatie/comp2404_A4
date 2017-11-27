@@ -30,7 +30,6 @@ Playlist::Playlist(const Playlist & aPlaylist){
 
 Playlist::~Playlist(){
 	cout << "~Playlist(void)" << endl;
-	this->notifyDeletion(*this);
 }
 int Playlist::getID(){return -1;}
 string Playlist::getName(){return name;}

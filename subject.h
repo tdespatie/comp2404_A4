@@ -30,14 +30,25 @@ public:
         //cout << "\nDettach: " << " observers size: " << observers.size() << "\n";
     }
 
-protected:
+    bool checkIfFollowing(Observer &obs) {
+        if (observers.isEmpty()) return false;
+        ArrayList <Observer> observers_copy = observers; //make copy to iterate over
+        for (ArrayList<Observer>::iterator itr = observers_copy.begin(); itr != observers_copy.end(); itr++) {
+            if (*itr == obs)
+                return true;
+        }
+    }
+
+
     template <typename U>
     void notifyDeletion(U &u) {
         ArrayList <Observer> observers_copy = observers; //make copy to iterate over
         for (ArrayList<Observer>::iterator itr = observers_copy.begin(); itr != observers_copy.end(); itr++) {
             (*itr).deletion(u);
+            this->dettach(*itr);
         }
     }
+protected:
     template <typename U>
     void notify(U &u) {
 
